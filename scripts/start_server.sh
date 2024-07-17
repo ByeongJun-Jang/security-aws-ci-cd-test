@@ -6,7 +6,7 @@ echo "Start server script started" > /home/ec2-user/start_server.log
 cd /home/ec2-user
 
 # Download the zip file from S3
-echo "Downloading example.zip from S3" >> /home/ec2-user/start_server.log
+echo "Downloading example.zip from S3 Test" >> /home/ec2-user/start_server.log
 aws s3 cp s3://groom-runner-bucket/example/example.zip . >> /home/ec2-user/start_server.log 2>&1
 
 # Check if the zip file exists
