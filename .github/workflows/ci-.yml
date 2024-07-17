@@ -26,8 +26,13 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
+      - name: List build/libs contents
+        run: ls build/libs
+
       - name: Archive build artifacts
-        run: tar -cvzf example.tar.gz -C build/libs . -C ../../ appspec.yml scripts/
+        run: |
+          JAR_NAME=$(ls build/libs | grep .jar)
+          tar -cvzf example.tar.gz -C build/libs $JAR_NAME -C ../../ appspec.yml scripts/
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
