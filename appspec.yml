@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /example.tar.gz
+  - source: /home/ec2-user/example.tar.gz
     destination: /home/ec2-user/
     overwrite: yes
 
