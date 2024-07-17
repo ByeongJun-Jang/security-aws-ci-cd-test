@@ -5,9 +5,9 @@ echo "BeforeInstall script started" > /home/ec2-user/before_install.log
 cd /home/ec2-user
 
 # Remove the existing jar file if it exists
-if [ -f "security-example-0.0.1-SNAPSHOT-plain.jar" ]; then
+if [ -f "security-example-0.0.1-SNAPSHOT.jar" ]; then
     echo "Removing existing jar file" >> /home/ec2-user/before_install.log
-    rm security-example-0.0.1-SNAPSHOT-plain.jar
+    rm security-example-0.0.1-SNAPSHOT.jar
 fi
 
 # Remove the existing tar.gz file if it exists
