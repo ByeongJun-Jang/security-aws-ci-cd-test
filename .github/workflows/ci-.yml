@@ -46,7 +46,14 @@ jobs:
         run: aws s3 cp example.tar.gz s3://groom-runner-bucket/example/example.tar.gz
 
       - name: Check S3 upload
-        run: aws s3 ls s3://groom-runner-bucket/example/
+        run: |
+          aws s3 ls s3://groom-runner-bucket/example/
+          if [ $? -ne 0 ]; then
+            echo "S3 upload failed or file not found in S3"
+            exit 1
+          else
+            echo "S3 upload succeeded"
+          fi
 
       - name: Deploy with AWS CodeDeploy
         run: |
