@@ -33,6 +33,7 @@ jobs:
         run: |
           JAR_NAME=$(ls build/libs | grep .jar)
           tar -cvzf example.tar.gz -C build/libs $JAR_NAME -C ../../ appspec.yml scripts/
+          ls -lh example.tar.gz
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -43,6 +44,10 @@ jobs:
 
       - name: Upload to S3
         run: aws s3 cp example.tar.gz s3://groom-runner-bucket/example/example.tar.gz
+        continue-on-error: true
+
+      - name: Check S3 upload
+        run: aws s3 ls s3://groom-runner-bucket/example/
 
       - name: Deploy with AWS CodeDeploy
         run: |
