@@ -3,12 +3,12 @@
 # Change to home directory
 cd /home/ec2-user
 
-# Check if the tar.gz file exists
-if [ -f "example.tar.gz" ]; then
-    echo "example.tar.gz file exists before extraction" > /home/ec2-user/start_server.log
-    tar -xvzf example.tar.gz
+# Check if the zip file exists
+if [ -f "example.zip" ]; then
+    echo "example.zip file exists before extraction" > /home/ec2-user/start_server.log
+    unzip example.zip
 else
-    echo "example.tar.gz file does not exist before extraction" > /home/ec2-user/start_server.log
+    echo "example.zip file does not exist before extraction" > /home/ec2-user/start_server.log
     exit 1
 fi
 

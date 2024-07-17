@@ -4,12 +4,12 @@ echo "BeforeInstall script started" > /home/ec2-user/before_install.log
 # Change to home directory
 cd /home/ec2-user
 
-# Check if the tar.gz file exists
-if [ -f "example.tar.gz" ]; then
-    echo "example.tar.gz file exists before deletion" >> /home/ec2-user/before_install.log
-    rm example.tar.gz
+# Check if the zip file exists
+if [ -f "example.zip" ]; then
+    echo "example.zip file exists before deletion" >> /home/ec2-user/before_install.log
+    rm example.zip
 else
-    echo "example.tar.gz file does not exist before deletion" >> /home/ec2-user/before_install.log
+    echo "example.zip file does not exist before deletion" >> /home/ec2-user/before_install.log
 fi
 
 # Remove the existing jar file if it exists
