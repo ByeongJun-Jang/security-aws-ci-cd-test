@@ -1,14 +1,16 @@
 #!/bin/bash
 
+echo "Start server script started" > /home/ec2-user/start_server.log
+
 # Change to home directory
 cd /home/ec2-user
 
 # Check if the zip file exists
 if [ -f "example.zip" ]; then
-    echo "example.zip file exists before extraction" > /home/ec2-user/start_server.log
-    unzip example.zip
+    echo "example.zip file exists before extraction" >> /home/ec2-user/start_server.log
+    unzip -o example.zip >> /home/ec2-user/start_server.log 2>&1
 else
-    echo "example.zip file does not exist before extraction" > /home/ec2-user/start_server.log
+    echo "example.zip file does not exist before extraction" >> /home/ec2-user/start_server.log
     exit 1
 fi
 
@@ -28,3 +30,5 @@ if [ -z "$JAR_NAME" ]; then
 fi
 
 nohup java -jar $JAR_NAME > /home/ec2-user/nohup.out 2>&1 &
+
+echo "Start server script finished" >> /home/ec2-user/start_server.log
