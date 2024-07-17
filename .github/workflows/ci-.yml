@@ -55,4 +55,4 @@ jobs:
             --application-name codedeploy \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name deploy-group \
-            --s3-location bucket=groom-runner-bucket,bundleType=tgz,key=example/example.tar.gz
+            --s3-location bucket=groom-runner-bucket,bundleType=tar,key=example/example.tar.gz
