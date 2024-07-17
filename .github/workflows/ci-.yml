@@ -44,7 +44,6 @@ jobs:
 
       - name: Upload to S3
         run: aws s3 cp example.tar.gz s3://groom-runner-bucket/example/example.tar.gz
-        continue-on-error: true
 
       - name: Check S3 upload
         run: aws s3 ls s3://groom-runner-bucket/example/
