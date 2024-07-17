@@ -16,4 +16,10 @@ if [ -f "example.tar.gz" ]; then
     rm example.tar.gz
 fi
 
+# Remove the existing appspec.yml file if it exists
+if [ -f "appspec.yml" ]; then
+    echo "Removing existing appspec.yml file" >> /home/ec2-user/before_install.log
+    rm appspec.yml
+fi
+
 echo "BeforeInstall script finished" >> /home/ec2-user/before_install.log
