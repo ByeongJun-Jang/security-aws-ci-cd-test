@@ -30,11 +30,12 @@ jobs:
       - name: List build/libs contents
         run: ls build/libs
 
-      - name: Archive build artifacts
+      - name: Archive build artifacts as ZIP
         run: |
-          JAR_NAME=$(ls build/libs | grep 'SNAPSHOT.jar')
-          tar -cvzf example.tar.gz build/libs/$JAR_NAME appspec.yml scripts/
-          ls -lh example.tar.gz
+          JAR_NAME=$(ls build/libs | grep '.jar$')
+          echo "Found JAR file: $JAR_NAME"
+          zip -r example.zip build/libs/$JAR_NAME appspec.yml scripts/
+          ls -lh example.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -44,7 +45,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 cp example.tar.gz s3://groom-runner-bucket/example/example.tar.gz
+        run: aws s3 cp example.zip s3://groom-runner-bucket/example/example.zip
 
       - name: Check S3 upload
         run: |
@@ -62,4 +63,4 @@ jobs:
             --application-name codedeploy \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name deploy-group \
-            --s3-location bucket=groom-runner-bucket,bundleType=tar,key=example/example.tar.gz
+            --s3-location bucket=groom-runner-bucket,bundleType=zip,key=example/example.zip
