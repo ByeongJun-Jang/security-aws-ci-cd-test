@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: ✅ Checkout branch
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -32,7 +33,7 @@ jobs:
       - name: Archive build artifacts
         run: |
           JAR_NAME=$(ls build/libs | grep .jar)
-          tar -cvzf example.tar.gz -C build/libs $JAR_NAME -C ../../ appspec.yml scripts/
+          tar -cvzf example.tar.gz build/libs/$JAR_NAME appspec.yml scripts/
           ls -lh example.tar.gz
 
       - name: Configure AWS credentials
