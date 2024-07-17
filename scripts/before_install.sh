@@ -22,4 +22,10 @@ if [ -f "appspec.yml" ]; then
     rm appspec.yml
 fi
 
+# Remove the existing start_server.sh file if it exists
+if [ -f "scripts/start_server.sh" ]; then
+    echo "Removing existing start_server.sh file" >> /home/ec2-user/before_install.log
+    rm scripts/start_server.sh
+fi
+
 echo "BeforeInstall script finished" >> /home/ec2-user/before_install.log
