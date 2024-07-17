@@ -1,7 +1,6 @@
 name: CI/CD Pipeline
 
 on:
-  # main 브랜치에 푸시되거나 풀 리퀘스트가 생성되면 워크플로우 실행
   push:
     branches: [ "main" ]
   pull_request:
@@ -28,7 +27,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: Archive build artifacts
-        run: tar cvfz example.tar.gz -C build/libs . -C ../../ appspec.yml scripts/
+        run: tar -cvzf example.tar.gz -C build/libs . -C ../../ appspec.yml scripts/
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -38,7 +37,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 cp example.tar.gz s3://groom-runner-bucket/example/
+        run: aws s3 cp example.tar.gz s3://groom-runner-bucket/example/example.tar.gz
 
       - name: Deploy with AWS CodeDeploy
         run: |
