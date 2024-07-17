@@ -14,6 +14,8 @@ fi
 if [ -f "example.tar.gz" ]; then
     echo "Removing existing tar.gz file" >> /home/ec2-user/before_install.log
     rm example.tar.gz
+else
+    echo "example.tar.gz file does not exist" >> /home/ec2-user/before_install.log
 fi
 
 # Remove the existing appspec.yml file if it exists
