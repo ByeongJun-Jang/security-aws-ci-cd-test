@@ -32,7 +32,7 @@ jobs:
 
       - name: Archive build artifacts
         run: |
-          JAR_NAME=$(ls build/libs | grep .jar)
+          JAR_NAME=$(ls build/libs | grep 'SNAPSHOT.jar')
           tar -cvzf example.tar.gz build/libs/$JAR_NAME appspec.yml scripts/
           ls -lh example.tar.gz
 
