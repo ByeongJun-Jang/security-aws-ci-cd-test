@@ -31,6 +31,14 @@ if [ -z "$JAR_NAME" ]; then
     exit 1
 fi
 
+# Kill existing Java processes
+CURRENT_PID=$(pgrep -f $JAR_NAME)
+if [ -n "$CURRENT_PID" ]; then
+    echo "Killing existing process $CURRENT_PID" >> /home/ec2-user/start_server.log
+    kill -9 $CURRENT_PID
+    sleep 5
+fi
+
 # Add additional logs to debug
 echo "Found JAR file: $JAR_NAME" >> /home/ec2-user/start_server.log
 echo "Executing: nohup java -jar /home/ec2-user/build/libs/$JAR_NAME" >> /home/ec2-user/start_server.log
