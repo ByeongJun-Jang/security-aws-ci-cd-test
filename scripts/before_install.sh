@@ -13,7 +13,7 @@ fi
 
 # S3에서 zip 파일 다운로드
 echo "S3에서 example.zip 다운로드" >> /home/ec2-user/before_install.log
-aws s3 cp s3://groom-runner-bucket/example/example.zip /home/ec2-user/example.zip >> /home/ec2-user/before_install.log 2>&1
+aws s3 cp s3://${S3_BUCKET_NAME}/${S3_FILE_KEY} /home/ec2-user/example.zip >> /home/ec2-user/before_install.log 2>&1
 
 # zip 파일이 존재하는지 확인
 if [ -f "/home/ec2-user/example.zip" ]; then
