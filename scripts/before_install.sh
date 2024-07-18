@@ -5,6 +5,12 @@ echo "BeforeInstall script started" > /home/ec2-user/before_install.log
 # Change to home directory
 cd /home/ec2-user
 
+# Remove the existing zip file if it exists
+if [ -f "/home/ec2-user/example.zip" ]; then
+    echo "Removing existing example.zip file" >> /home/ec2-user/before_install.log
+    rm /home/ec2-user/example.zip
+fi
+
 # Download the zip file from S3
 echo "Downloading example.zip from S3" >> /home/ec2-user/before_install.log
 aws s3 cp s3://groom-runner-bucket/example/example.zip /home/ec2-user/example.zip >> /home/ec2-user/before_install.log 2>&1
