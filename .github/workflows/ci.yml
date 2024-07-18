@@ -34,8 +34,15 @@ jobs:
       - name: List build/libs contents
         run: ls build/libs
 
+      - name: Archive build artifacts as ZIP
+        run: |
+          JAR_NAME=$(ls build/libs | grep '.jar$')
+          echo "Found JAR file: $JAR_NAME"
+          zip -r build_artifact.zip build/libs/$JAR_NAME appspec.yml scripts/
+          ls -lh build_artifact.zip
+
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
-          path: build/libs/*.jar
+          path: build_artifact.zip
