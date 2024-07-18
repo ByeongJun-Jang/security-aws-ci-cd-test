@@ -70,12 +70,12 @@ jobs:
             --deployment-group-name deploy-group \
             --s3-location bucket=groom-runner-bucket,bundleType=zip,key=example/example.zip
 
-      - name: Show Gradle Build Summary
+      - name: Show Gradle Build and Test Summary
         if: success()
         run: |
           echo "### Build Summary"
           echo "Build succeeded in ${{ steps.gradle_build.outputs.time }}"
           echo "Test Summary:"
-          ./gradlew test --info | grep -A 5 "Test summary"
+          ./gradlew test --info
           echo "Artifacts:"
           ls build/libs
