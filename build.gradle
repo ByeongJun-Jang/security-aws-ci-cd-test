@@ -44,12 +44,3 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-bootJar {
-	archiveFileName = 'security-example-0.0.1-SNAPSHOT.jar'
-	mainClass = 'spring.security_example.SecurityExampleApplication'
-}
-
-jar {
-	enabled = false
-}
