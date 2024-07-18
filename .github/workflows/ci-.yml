@@ -26,6 +26,11 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew clean build
+        id: gradle_build
+
+      - name: Run Tests
+        run: ./gradlew test
+        id: gradle_test
 
       - name: List build/libs contents
         run: ls build/libs
@@ -64,3 +69,13 @@ jobs:
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name deploy-group \
             --s3-location bucket=groom-runner-bucket,bundleType=zip,key=example/example.zip
+
+      - name: Show Gradle Build Summary
+        if: success()
+        run: |
+          echo "### Build Summary"
+          echo "Build succeeded in ${{ steps.gradle_build.outputs.time }}"
+          echo "Test Summary:"
+          ./gradlew test --info | grep -A 5 "Test summary"
+          echo "Artifacts:"
+          ls build/libs
