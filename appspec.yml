@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /home/ec2-user/example.zip
+  - source: example.zip
     destination: /home/ec2-user/
     overwrite: yes
 
