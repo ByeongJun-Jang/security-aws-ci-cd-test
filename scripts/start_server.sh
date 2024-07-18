@@ -1,53 +1,53 @@
 #!/bin/bash
 
-echo "Start server script started" > /home/ec2-user/start_server.log
+echo "Start server 스크립트 시작" > /home/ec2-user/start_server.log
 
-# Change to home directory
+# 홈 디렉토리로 이동
 cd /home/ec2-user
 
-# Check if the zip file exists
+# zip 파일이 존재하는지 확인
 if [ -f "/home/ec2-user/example.zip" ]; then
-    echo "Unzipping example.zip" >> /home/ec2-user/start_server.log
+    echo "example.zip 압축 해제" >> /home/ec2-user/start_server.log
     unzip -o /home/ec2-user/example.zip -d /home/ec2-user/ >> /home/ec2-user/start_server.log 2>&1
 else
-    echo "example.zip file does not exist before extraction" >> /home/ec2-user/start_server.log
+    echo "example.zip 파일이 존재하지 않음" >> /home/ec2-user/start_server.log
     exit 1
 fi
 
-# Change to the build/libs directory
+# build/libs 디렉토리로 이동
 if [ -d "/home/ec2-user/build/libs" ]; then
     cd /home/ec2-user/build/libs
 else
-    echo "build/libs directory does not exist" >> /home/ec2-user/start_server.log
+    echo "build/libs 디렉토리가 존재하지 않음" >> /home/ec2-user/start_server.log
     exit 1
 fi
 
-echo "> 🟢 Run new spring services." >> /home/ec2-user/start_server.log
+echo "> 🟢 새로운 스프링 서비스 실행" >> /home/ec2-user/start_server.log
 
-# Check if the JAR file exists
+# JAR 파일이 존재하는지 확인
 JAR_NAME=$(ls | grep 'security-example-0.0.1-SNAPSHOT.jar')
 if [ -z "$JAR_NAME" ]; then
-    echo "No JAR file found in build/libs directory" >> /home/ec2-user/start_server.log
+    echo "build/libs 디렉토리에 JAR 파일이 없음" >> /home/ec2-user/start_server.log
     exit 1
 fi
 
-# Kill existing Java processes
+# 기존 Java 프로세스 종료
 CURRENT_PID=$(pgrep -f $JAR_NAME)
 if [ -n "$CURRENT_PID" ]; then
-    echo "Killing existing process $CURRENT_PID" >> /home/ec2-user/start_server.log
+    echo "기존 프로세스 종료: $CURRENT_PID" >> /home/ec2-user/start_server.log
     kill -9 $CURRENT_PID
     sleep 5
 fi
 
-# Add additional logs to debug
-echo "Found JAR file: $JAR_NAME" >> /home/ec2-user/start_server.log
-echo "Executing: nohup java -jar /home/ec2-user/build/libs/$JAR_NAME" >> /home/ec2-user/start_server.log
+# 추가 로그
+echo "발견된 JAR 파일: $JAR_NAME" >> /home/ec2-user/start_server.log
+echo "실행 명령: nohup java -jar /home/ec2-user/build/libs/$JAR_NAME" >> /home/ec2-user/start_server.log
 
-# Start the application
+# 애플리케이션 시작
 nohup java -jar /home/ec2-user/build/libs/$JAR_NAME > /home/ec2-user/application.log 2> /home/ec2-user/error.log &
 
-# Capture the new process ID
+# 새로운 프로세스 ID 캡처
 NEW_PID=$(pgrep -f $JAR_NAME)
-echo "New process id is $NEW_PID" >> /home/ec2-user/start_server.log
+echo "새로운 프로세스 ID: $NEW_PID" >> /home/ec2-user/start_server.log
 
-echo "Start server script finished" >> /home/ec2-user/start_server.log
+echo "Start server 스크립트 완료" >> /home/ec2-user/start_server.log

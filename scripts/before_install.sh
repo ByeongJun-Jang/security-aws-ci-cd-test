@@ -1,26 +1,26 @@
 #!/bin/bash
 
-echo "BeforeInstall script started" > /home/ec2-user/before_install.log
+echo "BeforeInstall 스크립트 시작" > /home/ec2-user/before_install.log
 
-# Change to home directory
+# 홈 디렉토리로 이동
 cd /home/ec2-user
 
-# Remove the existing zip file if it exists
+# 기존 zip 파일이 있는 경우 삭제
 if [ -f "/home/ec2-user/example.zip" ]; then
-    echo "Removing existing example.zip file" >> /home/ec2-user/before_install.log
+    echo "기존 example.zip 파일 삭제" >> /home/ec2-user/before_install.log
     rm /home/ec2-user/example.zip
 fi
 
-# Download the zip file from S3
-echo "Downloading example.zip from S3" >> /home/ec2-user/before_install.log
+# S3에서 zip 파일 다운로드
+echo "S3에서 example.zip 다운로드" >> /home/ec2-user/before_install.log
 aws s3 cp s3://groom-runner-bucket/example/example.zip /home/ec2-user/example.zip >> /home/ec2-user/before_install.log 2>&1
 
-# Check if the zip file exists
+# zip 파일이 존재하는지 확인
 if [ -f "/home/ec2-user/example.zip" ]; then
-    echo "example.zip file exists after download" >> /home/ec2-user/before_install.log
+    echo "다운로드 후 example.zip 파일 존재" >> /home/ec2-user/before_install.log
 else
-    echo "example.zip file does not exist after download" >> /home/ec2-user/before_install.log
+    echo "다운로드 후 example.zip 파일이 존재하지 않음" >> /home/ec2-user/before_install.log
     exit 1
 fi
 
-echo "BeforeInstall script finished" >> /home/ec2-user/before_install.log
+echo "BeforeInstall 스크립트 완료" >> /home/ec2-user/before_install.log

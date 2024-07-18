@@ -1,0 +1,81 @@
+name: CI/CD 파이프라인 🚀
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 브랜치 체크아웃 🧐
+        uses: actions/checkout@v4
+
+      - name: JDK 17 설정 ☕
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: gradlew 실행 권한 부여 🔧
+        run: chmod +x ./gradlew
+
+      - name: Gradle로 빌드 🚧
+        run: ./gradlew clean build
+        id: gradle_build
+
+      - name: 테스트 실행 🧪
+        run: ./gradlew test
+        id: gradle_test
+
+      - name: 빌드 아티팩트 목록 🗃️
+        run: ls build/libs
+
+      - name: 빌드 아티팩트 ZIP 압축 📦
+        run: |
+          JAR_NAME=$(ls build/libs | grep '.jar$')
+          echo "발견된 JAR 파일: $JAR_NAME"
+          zip -r example.zip build/libs/$JAR_NAME appspec.yml scripts/
+          ls -lh example.zip
+
+      - name: AWS 자격 증명 구성 🔑
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: S3에 업로드 🚀
+        run: aws s3 cp example.zip s3://groom-runner-bucket/example/example.zip
+
+      - name: S3 업로드 확인 🧐
+        run: |
+          aws s3 ls s3://groom-runner-bucket/example/
+          if [ $? -ne 0 ]; then
+            echo "S3 업로드 실패 또는 S3에 파일이 없음"
+            exit 1
+          else
+            echo "S3 업로드 성공"
+          fi
+
+      - name: AWS CodeDeploy로 배포 🚀
+        run: |
+          aws deploy create-deployment \
+            --application-name codedeploy \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name deploy-group \
+            --s3-location bucket=groom-runner-bucket,bundleType=zip,key=example/example.zip
+
+      - name: Gradle 빌드 및 테스트 요약 📋
+        if: success()
+        run: |
+          echo "### 빌드 요약"
+          echo "빌드 성공: ${{ steps.gradle_build.outputs.time }}"
+          echo "테스트 요약:"
+          ./gradlew test --info
+          echo "아티팩트:"
+          ls build/libs
