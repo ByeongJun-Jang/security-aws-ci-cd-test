@@ -5,9 +5,14 @@ echo "Start server script started" > /home/ec2-user/start_server.log
 # Change to home directory
 cd /home/ec2-user
 
-# Unzip the downloaded file
-echo "Unzipping example.zip" >> /home/ec2-user/start_server.log
-unzip -o /home/ec2-user/example.zip -d /home/ec2-user/ >> /home/ec2-user/start_server.log 2>&1
+# Check if the zip file exists
+if [ -f "/home/ec2-user/example.zip" ]; then
+    echo "Unzipping example.zip" >> /home/ec2-user/start_server.log
+    unzip -o /home/ec2-user/example.zip -d /home/ec2-user/ >> /home/ec2-user/start_server.log 2>&1
+else
+    echo "example.zip file does not exist before extraction" >> /home/ec2-user/start_server.log
+    exit 1
+fi
 
 # Change to the build/libs directory
 if [ -d "/home/ec2-user/build/libs" ]; then
@@ -25,5 +30,8 @@ if [ -z "$JAR_NAME" ]; then
 fi
 
 nohup java -jar $JAR_NAME > /home/ec2-user/nohup.out 2>&1 &
+
+NEW_PID=$(pgrep -f $JAR_NAME)
+echo "New process id is $NEW_PID" >> /home/ec2-user/start_server.log
 
 echo "Start server script finished" >> /home/ec2-user/start_server.log
