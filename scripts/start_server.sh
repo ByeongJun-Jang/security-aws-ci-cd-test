@@ -7,11 +7,11 @@ cd /home/ec2-user
 
 # Unzip the downloaded file
 echo "Unzipping example.zip" >> /home/ec2-user/start_server.log
-unzip -o example.zip >> /home/ec2-user/start_server.log 2>&1
+unzip -o /home/ec2-user/example.zip -d /home/ec2-user/ >> /home/ec2-user/start_server.log 2>&1
 
 # Change to the build/libs directory
-if [ -d "build/libs" ]; then
-    cd build/libs
+if [ -d "/home/ec2-user/build/libs" ]; then
+    cd /home/ec2-user/build/libs
 else
     echo "build/libs directory does not exist" >> /home/ec2-user/start_server.log
     exit 1

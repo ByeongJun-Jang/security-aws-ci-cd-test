@@ -1,9 +1,5 @@
 version: 0.0
 os: linux
-files:
-  - source: example.zip
-    destination: /home/ec2-user/
-    overwrite: yes
 
 permissions:
   - object: /home/ec2-user
