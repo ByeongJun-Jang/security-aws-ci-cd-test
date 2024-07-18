@@ -23,14 +23,22 @@ else
 fi
 
 echo "> 🟢 Run new spring services." >> /home/ec2-user/start_server.log
-JAR_NAME=$(ls | grep .jar)
+
+# Check if the JAR file exists
+JAR_NAME=$(ls | grep 'security-example-0.0.1-SNAPSHOT.jar')
 if [ -z "$JAR_NAME" ]; then
     echo "No JAR file found in build/libs directory" >> /home/ec2-user/start_server.log
     exit 1
 fi
 
-nohup java -jar $JAR_NAME > /home/ec2-user/application.log 2> /home/ec2-user/error.log &
+# Add additional logs to debug
+echo "Found JAR file: $JAR_NAME" >> /home/ec2-user/start_server.log
+echo "Executing: nohup java -jar /home/ec2-user/build/libs/$JAR_NAME" >> /home/ec2-user/start_server.log
 
+# Start the application
+nohup java -jar /home/ec2-user/build/libs/$JAR_NAME > /home/ec2-user/application.log 2> /home/ec2-user/error.log &
+
+# Capture the new process ID
 NEW_PID=$(pgrep -f $JAR_NAME)
 echo "New process id is $NEW_PID" >> /home/ec2-user/start_server.log
 
