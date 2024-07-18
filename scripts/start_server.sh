@@ -29,7 +29,7 @@ if [ -z "$JAR_NAME" ]; then
     exit 1
 fi
 
-nohup java -jar $JAR_NAME > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar $JAR_NAME > /home/ec2-user/application.log 2> /home/ec2-user/error.log &
 
 NEW_PID=$(pgrep -f $JAR_NAME)
 echo "New process id is $NEW_PID" >> /home/ec2-user/start_server.log
