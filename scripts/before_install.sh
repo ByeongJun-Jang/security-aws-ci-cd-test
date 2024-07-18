@@ -2,6 +2,10 @@
 
 echo "BeforeInstall 스크립트 시작" > /home/ec2-user/before_install.log
 
+# 환경 변수 설정
+S3_BUCKET_NAME=${S3_BUCKET_NAME:-$(grep S3_BUCKET_NAME /etc/environment | cut -d '=' -f2)}
+S3_FILE_KEY=${S3_FILE_KEY:-$(grep S3_FILE_KEY /etc/environment | cut -d '=' -f2)}
+
 # 홈 디렉토리로 이동
 cd /home/ec2-user
 
