@@ -2,13 +2,16 @@ name: Backend CI/CD 파이프라인 🚀
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [main]
+    types: [closed]
 
 jobs:
   build-and-deploy:
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
@@ -69,8 +72,3 @@ jobs:
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name ${{ secrets.BACKEND_CODEDEPLOY_DEPLOYMENT_GROUP_NAME }} \
             --s3-location bucket=${{ secrets.BACKEND_S3_BUCKET }},bundleType=zip,key=${{ secrets.BACKEND_S3_KEY }}
-
-      - name: 환경 변수 설정
-        run: |
-          echo "S3_BUCKET_NAME=${{ secrets.BACKEND_S3_BUCKET }}" >> $GITHUB_ENV
-          echo "S3_FILE_KEY=${{ secrets.BACKEND_S3_KEY }}" >> $GITHUB_ENV
